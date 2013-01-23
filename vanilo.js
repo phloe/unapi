@@ -5,12 +5,8 @@
 	}
 	
 	var prototype = global.Element && Element.prototype,
-		_prototype = {},
 		html = document.documentElement,
-		match = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector || html.oMatchesSelector;
-	
-	if (prototype) {
-		
+		match = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector || html.oMatchesSelector,
 		_prototype = {
 		
 			matches: function (selector) {
@@ -42,10 +38,6 @@
 			}
 			
 		};
-		
-		
-		
-	}
 	
 	function disassemble (method) {
 		var match = method.toString().match(/^function\s?(?:[^( ]+\s)?\(([^)]*)\)\s?\{((?:.|\n)*)\}$/);
