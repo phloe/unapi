@@ -4,8 +4,7 @@
 		return; // vanilo already defined
 	}
 	
-	var prototype = global.Element && Element.prototype,
-		html = document.documentElement,
+	var html = document.documentElement,
 		match = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector || html.oMatchesSelector,
 		_prototype = {
 		
@@ -41,24 +40,22 @@
 	
 	function disassemble (method) {
 		var match = method.toString().match(/^function\s?(?:[^( ]+\s)?\(([^)]*)\)\s?\{((?:.|\n)*)\}$/);
-		return {
-			a: match[1].split(/\s*,\s*/),
-			b: match[2]
-		};
+		match.shift();
+		return match;
 	}
 	
 	function assemble (parts) {	
-		return (1, eval)("(function(" + parts.a.join(", ") + "){" + parts.b + "})");
+		return (1, eval)("(function(" + parts[0] + "){" + parts[1] + "})");
 	}
 	
 	function wrap (method) {
 		var parts = disassemble(method),
-			returnsThis = parts.b.match(/(?:^|\W)return this;/),
+			returnsThis = parts[1].match(/(?:^|\W)return this;/),
 			b = [
 				"var _that, _i = 0, _l = this.elements.length;",
 				"while (_i < _l) {",
 				"_that = this.elements[_i++];",
-				parts.b
+				parts[1]
 				.replace(/(^|\W)return ([^;]+);/, returnsThis ? "$1" : "$1_results.push($2);")
 				.replace(/(^|\W)this(\W|$)/g, "$1_that$2"),
 				"}"
@@ -70,15 +67,15 @@
 
 		b.push("return " + (returnsThis ? "this" : "_results") + ";");
 
-		parts.b = b.join("\n");
+		parts[1] = b.join("\n");
 		return assemble(parts);
 	}
 	
 	function genericize (method, that) {
 		var parts = disassemble(method);
 		
-		parts.b = parts.b.replace(/(^|\W)this(\W|$)/g, "$1" + that + "$2");
-		parts.a.unshift(that);
+		parts[0] = that + "," + parts[0];
+		parts[1] = parts[1].replace(/(^|\W)this(\W|$)/g, "$1" + that + "$2");
 		
 		return assemble(parts);
 	}
@@ -110,9 +107,12 @@
 	Vanilo.prototype = wrapperPrototype;
 		
 	function install () {
-		for (var name in _prototype) {
-			if (_prototype.hasOwnProperty(name)) {
-				prototype[name] = _prototype[name];
+		var prototype = global.Element && Element.prototype;
+		if (prototype) {
+			for (var name in _prototype) {
+				if (_prototype.hasOwnProperty(name)) {
+					prototype[name] = _prototype[name];
+				}
 			}
 		}
 	}
