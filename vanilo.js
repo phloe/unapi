@@ -77,20 +77,22 @@
 		return assemble(parts);
 	}
 	
-	
 	function get (selector, parent) {
 		return (parent || document).querySelectorAll(selector);
 	}
 	
+	// returns wrapper instances while also being the namespace for generics.
 	function vanilo (selector, parent) {
 		var elements = (typeof selector == "string") ? get(selector, parent) : selector;
 		return elements && new Vanilo(elements) || null;
 	}
 	
+	// wrapper
 	function Vanilo (elements) {
 		this.elements = (elements.nodeType == 1) ? [elements] : elements;
 	}
 
+	// extend wrapper prototype and generics namespace with API methods
 	(function (prototype, parts) {
 	
 		for (var name in API) {
@@ -103,7 +105,8 @@
 		
 		Vanilo.prototype = prototype;
 	} ({}));
-		
+	
+	// extend element protoype with API methods
 	function install () {
 		var prototype = global.Element && Element.prototype;
 		if (prototype) {
@@ -115,6 +118,7 @@
 		}
 	}
 	
+	// only extend element prototype on demand
 	if (config && config.install) {
 		install();
 	}
