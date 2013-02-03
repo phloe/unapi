@@ -9,4 +9,17 @@ Experiment exposing an API as:
 * extended element prototypes (Prototype, MooTools etc).
 * namespaced generics (YUI, dojo etc).
 
-All at the same time!
+**ALL** at the same time!
+
+#### Example
+
+```js
+// wrapper style
+vanilo(document.body).addClass("foo");
+
+// extended element prototype
+document.body.addClass("bar");
+
+// namespaced generics
+vanilo.removeClass(document.body, "foo");
+```
