@@ -6,7 +6,7 @@
 	
 	var html = document.documentElement,
 		match = html.matchesSelector || html.mozMatchesSelector || html.webkitMatchesSelector || html.msMatchesSelector || html.oMatchesSelector,
-		_prototype = {
+		API = {
 		
 			matches: function (selector) {
 				return match.call(this, selector);
@@ -39,18 +39,17 @@
 		};
 	
 	function disassemble (method) {
-		var match = method.toString().match(/^function\s?(?:[^( ]+\s)?\(([^)]*)\)\s?\{((?:.|\n)*)\}$/);
-		match.shift();
-		return match;
+		var parts = method.toString().match(/^function\s?(?:[^( ]+\s)?\(([^)]*)\)\s?\{((?:.|\n)*)\}$/);
+		parts.shift();
+		return parts;
 	}
 	
 	function assemble (parts) {	
 		return (1, eval)("(function(" + parts[0] + "){" + parts[1] + "})");
 	}
 	
-	function wrap (method) {
-		var parts = disassemble(method),
-			returnsThis = parts[1].match(/(?:^|\W)return this;/),
+	function wrap (parts) {
+		var returnsThis = parts[1].match(/(?:^|\W)return this;/),
 			b = [
 				"var _that, _i = 0, _l = this.elements.length;",
 				"while (_i < _l) {",
@@ -71,9 +70,7 @@
 		return assemble(parts);
 	}
 	
-	function genericize (method, that) {
-		var parts = disassemble(method);
-		
+	function genericize (parts, that) {
 		parts[0] = that + "," + parts[0];
 		parts[1] = parts[1].replace(/(^|\W)this(\W|$)/g, "$1" + that + "$2");
 		
@@ -90,28 +87,29 @@
 		return elements && new Vanilo(elements) || null;
 	}
 	
-	var wrapperPrototype = {};
-	
-	for (var name in _prototype) {
-		if (_prototype.hasOwnProperty(name)) {
-			wrapperPrototype[name] = wrap(_prototype[name]);
-			vanilo[name] = genericize(_prototype[name], "that");
-		}
-	}
-	
-	
 	function Vanilo (elements) {
 		this.elements = (elements.nodeType == 1) ? [elements] : elements;
 	}
+
+	(function (prototype, parts) {
 	
-	Vanilo.prototype = wrapperPrototype;
+		for (var name in API) {
+			if (API.hasOwnProperty(name)) {
+				parts = disassemble(API[name]);
+				prototype[name] = wrap(parts.slice(0));
+				vanilo[name] = genericize(parts, "_that");
+			}
+		}
+		
+		Vanilo.prototype = prototype;
+	} ({}));
 		
 	function install () {
 		var prototype = global.Element && Element.prototype;
 		if (prototype) {
-			for (var name in _prototype) {
-				if (_prototype.hasOwnProperty(name)) {
-					prototype[name] = _prototype[name];
+			for (var name in API) {
+				if (API.hasOwnProperty(name)) {
+					prototype[name] = API[name];
 				}
 			}
 		}
