@@ -1,7 +1,7 @@
 (function (global, document, config) {
 	
 	if (config && typeof config.install == "function") {
-		return; // vanilo already defined
+		return; // unapi already defined
 	}
 	
 	var html = document.documentElement,
@@ -82,13 +82,13 @@
 	}
 	
 	// returns wrapper instances while also being the namespace for generics.
-	function vanilo (selector, parent) {
+	function unapi (selector, parent) {
 		var elements = (typeof selector == "string") ? get(selector, parent) : selector;
-		return elements && new Vanilo(elements) || null;
+		return elements && new Unapi(elements) || null;
 	}
 	
 	// wrapper
-	function Vanilo (elements) {
+	function Unapi (elements) {
 		this.elements = (elements.nodeType == 1) ? [elements] : elements;
 	}
 
@@ -99,11 +99,11 @@
 			if (API.hasOwnProperty(name)) {
 				parts = disassemble(API[name]);
 				prototype[name] = wrap(parts.slice(0));
-				vanilo[name] = genericize(parts, "_that");
+				unapi[name] = genericize(parts, "_that");
 			}
 		}
 		
-		Vanilo.prototype = prototype;
+		Unapi.prototype = prototype;
 	} ({}));
 	
 	// extend element protoype with API methods
@@ -123,8 +123,8 @@
 		install();
 	}
 	
-	vanilo.install = install;
+	unapi.install = install;
 	
-	global.vanilo = vanilo;
+	global.unapi = unapi;
 	
-} (this, document, this.vanilo));
+} (this, document, this.unapi));

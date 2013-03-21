@@ -2,25 +2,25 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>vanilo test</title>
+		<title>unapi test</title>
 		<script>
-			var vanilo = {
+			var unapi = {
 				install: true
 			};
 		</script>
-		<script src="../vanilo.js"></script>
+		<script src="../unapi.js"></script>
 	</head>
 	<body>
 		<script>
 			
 			// wrapper style
-			vanilo(document.body).addClass("foo");
+			unapi(document.body).addClass("foo");
 			
 			// extended element prototype
 			document.body.addClass("bar");
 			
 			// namespaced generics
-			vanilo.removeClass(document.body, "foo");
+			unapi.removeClass(document.body, "foo");
 			
 		</script>
     </body>

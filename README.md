@@ -1,7 +1,7 @@
-![vanilo](http://cdn.memegenerator.net/instances/400x/34267514.jpg)
+![unapi](http://cdn.memegenerator.net/instances/400x/34267514.jpg)
 
-vanilo
-======
+unapi
+=====
 
 Experiment exposing an API as:
 
@@ -15,11 +15,11 @@ Experiment exposing an API as:
 
 ```js
 // wrapper style
-vanilo(document.body).addClass("foo");
+unapi(document.body).addClass("foo");
 
 // extended element prototype
 document.body.addClass("bar");
 
 // namespaced generics
-vanilo.removeClass(document.body, "foo");
+unapi.removeClass(document.body, "foo");
 ```
