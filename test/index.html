@@ -14,25 +14,29 @@
 		<script>
 			
 			// wrapper style
-			var body = unapi(document.body);
+			var body = unapi("body");
 			body.addClass("foo");
 			
 			if (window.console) {
 				console.log("document.body haz foo", body.matches(".foo"));
 			}
 			
+			
 			// extended element prototype
-			document.body.addClass("bar");
+			var body = document.get("body"); 
+			body.addClass("bar");
 			
 			if (window.console) {
-				console.log("document.body haz bar", document.body.matches(".bar"));
+				console.log("document.body haz bar", body.matches(".bar"));
 			}
 			
+			
 			// namespaced generics
-			unapi.removeClass(document.body, "foo");
+			var body = unapi.get("body");
+			unapi.removeClass(body, "foo");
 			
 			if (window.console) {
-				console.log("document.body haz foo", unapi.matches(document.body, ".foo"));
+				console.log("document.body haz foo", unapi.matches(body, ".foo"));
 			}
 			
 		</script>

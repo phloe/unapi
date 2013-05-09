@@ -77,13 +77,19 @@
 		return assemble(parts);
 	}
 	
+	var slice = Array.prototype.slice;
+	
 	function get (selector, parent) {
-		return (parent || document).querySelectorAll(selector);
+		return (parent || document).querySelector(selector);
+	}
+	
+	function getAll (selector, parent) {
+		return slice.call((parent || document).querySelectorAll(selector), 0);
 	}
 	
 	// returns wrapper instances while also being the namespace for generics.
 	function unapi (selector, parent) {
-		var elements = (typeof selector == "string") ? get(selector, parent) : selector;
+		var elements = (typeof selector == "string") ? getAll(selector, parent) : selector;
 		return elements && new Unapi(elements) || null;
 	}
 	
@@ -116,6 +122,8 @@
 				}
 			}
 		}
+		document.get = get;
+		document.getAll = getAll;
 	}
 	
 	// only extend element prototype on demand
@@ -124,6 +132,10 @@
 	}
 	
 	unapi.install = install;
+	
+	unapi.get = get;
+	
+	unapi.getAll = getAll;
 	
 	global.unapi = unapi;
 	
