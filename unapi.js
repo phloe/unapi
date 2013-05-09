@@ -39,22 +39,22 @@
 		};
 	
 	function disassemble (method) {
-		var parts = method.toString().match(/^function\s?(?:[^( ]+\s)?\(([^)]*)\)\s?\{((?:.|\n)*)\}$/);
+		var parts = method.toString().match(/^(function\s?(?:[^( ]+\s)?\()([^)]*)(\)\s?\{)((?:.|\n)*)(\})$/);
 		parts.shift();
 		return parts;
 	}
 	
 	function assemble (parts) {	
-		return eval("(function(" + parts[0] + "){" + parts[1] + "})");
+		return eval("(" + parts.join("") + ")");
 	}
 	
 	function wrap (parts) {
-		var returnsThis = parts[1].match(/(?:^|\W)return this;/),
+		var returnsThis = parts[3].match(/(?:^|\W)return this;/),
 			b = [
 				"var _that, _i = 0, _l = this.elements.length;",
 				"while (_i < _l) {",
 				"_that = this.elements[_i++];",
-				parts[1]
+				parts[3]
 				.replace(/(^|\W)return ([^;]+);/, returnsThis ? "$1" : "$1_results.push($2);")
 				.replace(/(^|\W)this(\W|$)/g, "$1_that$2"),
 				"}"
@@ -66,13 +66,13 @@
 
 		b.push("return " + (returnsThis ? "this" : "_results") + ";");
 
-		parts[1] = b.join("\n");
+		parts[3] = b.join("\n");
 		return assemble(parts);
 	}
 	
 	function genericize (parts, that) {
-		parts[0] = that + "," + parts[0];
-		parts[1] = parts[1].replace(/(^|\W)this(\W|$)/g, "$1" + that + "$2");
+		parts[1] = that + "," + parts[1];
+		parts[3] = parts[3].replace(/(^|\W)this(\W|$)/g, "$1" + that + "$2");
 		
 		return assemble(parts);
 	}
