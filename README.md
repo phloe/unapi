@@ -3,7 +3,7 @@
 unapi
 =====
 
-Experiment exposing an API as:
+Experiment exposing a DOM API as:
 
 * wrapper-style (jQuery, zepto etc).
 * extended element prototypes (Prototype, MooTools etc).
