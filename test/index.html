@@ -14,13 +14,26 @@
 		<script>
 			
 			// wrapper style
-			unapi(document.body).addClass("foo");
+			var body = unapi(document.body);
+			body.addClass("foo");
+			
+			if (window.console) {
+				console.log("document.body haz foo", body.matches(".foo"));
+			}
 			
 			// extended element prototype
 			document.body.addClass("bar");
 			
+			if (window.console) {
+				console.log("document.body haz bar", document.body.matches(".bar"));
+			}
+			
 			// namespaced generics
 			unapi.removeClass(document.body, "foo");
+			
+			if (window.console) {
+				console.log("document.body haz foo", unapi.matches(document.body, ".foo"));
+			}
 			
 		</script>
     </body>

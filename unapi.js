@@ -45,7 +45,7 @@
 	}
 	
 	function assemble (parts) {	
-		return (1, eval)("(function(" + parts[0] + "){" + parts[1] + "})");
+		return eval("(function(" + parts[0] + "){" + parts[1] + "})");
 	}
 	
 	function wrap (parts) {
