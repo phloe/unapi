@@ -5,9 +5,9 @@ unapi
 
 Experiment exposing a DOM API as:
 
-* wrapper-style (jQuery, zepto etc).
-* extended element prototypes (Prototype, MooTools etc).
-* namespaced generics (YUI, dojo etc).
+* wrapper-style (like jQuery, zepto etc).
+* extended element prototypes (like Prototype, MooTools etc).
+* namespaced generics (like YUI, dojo etc).
 
 **ALL** at the same time!
 
